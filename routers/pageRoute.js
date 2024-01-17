@@ -5,7 +5,8 @@ const router = express.Router();
 
 
 router.route('/').get(pageController.getIndexPage)
-router.route('/:page').get(pageController.getPage)
+router.route('/about').get(pageController.getAboutPage)
+//router.route('/:page').get(pageController.getPage)
 
 
 module.exports = router;

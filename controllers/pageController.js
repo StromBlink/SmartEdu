@@ -5,3 +5,6 @@ exports.getPage = (req, res) => {
 exports.getIndexPage = (res, req) => {
     req.render('index', { page_name: "index" })
 }
+exports.getAboutPage = (res, req) => {
+    req.render('about', { page_name: "about" })
+}
