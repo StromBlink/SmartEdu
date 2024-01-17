@@ -25,7 +25,7 @@ exports.loginUser = async (req, res) => {
             const same = await bcrypt.compare(password, user.password); // Compare passwords 
             if (same) { // Create a user session or send a token 
                 req.session.userID = user._id;
-                res.redirect('/')
+                res.redirect('/users/dashboard')
                 //  res.status(200).send("You are logged in");
             } else { res.status(401).send("Invalid password"); }
         } else { res.status(404).send("User not found"); }
@@ -37,3 +37,13 @@ exports.logoutUser = async (req, res) => {
     req.session.destroy(() => res.redirect('/'))
 
 };
+exports.getDashboard = async (req, res) => {
+    const id = req.session.userID
+    const user = await User.findOne({ _id: id })
+    console.log(user.name)
+    console.log(req.session.userID)
+    res.render('dashboard', {
+        page_name: "dashboard",
+        user
+    })
+}
