@@ -8,3 +8,8 @@ exports.getIndexPage = (res, req) => {
 exports.getAboutPage = (res, req) => {
     req.render('about', { page_name: "about" })
 }
+exports.getRegisterPage = (res, req) => {
+    req.render('register', {
+        page_name: "register",
+    })
+}

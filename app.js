@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const pageRouter = require('./routers/pageRoute');
 const courseRouter = require('./routers/courseRoute');
 const categoryRoute = require('./routers/categoryRoute');
+const userRoute = require('./routers/userRoute');
 const app = express();
 
 //Connect DB
@@ -18,6 +19,7 @@ app.set("view engine", "ejs");
 // MiddleWares
 app.use(express.static('public'));
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -26,6 +28,7 @@ app.use(express.json())
 app.use('/', pageRouter)
 app.use('/', courseRouter)
 app.use('/category', categoryRoute);
+app.use('/users', userRoute);
 
 
 
