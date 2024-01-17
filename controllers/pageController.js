@@ -1,15 +1,23 @@
 
 exports.getPage = (req, res) => {
+
     res.render(req.params.page, { page_name: req.params.page });
 };
-exports.getIndexPage = (res, req) => {
-    req.render('index', { page_name: "index" })
+exports.getIndexPage = (req, res) => {
+    console.log(req.session.userID)
+    res.render('index', { page_name: "index" })
 }
-exports.getAboutPage = (res, req) => {
-    req.render('about', { page_name: "about" })
+exports.getAboutPage = (req, res) => {
+    res.render('about', { page_name: "about" })
 }
-exports.getRegisterPage = (res, req) => {
-    req.render('register', {
+exports.getRegisterPage = (req, res) => {
+    res.render('register', {
         page_name: "register",
+    })
+}
+exports.getLoginPage = (req, res) => {
+
+    res.render('login', {
+        page_name: "login",
     })
 }

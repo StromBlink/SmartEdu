@@ -1,9 +1,9 @@
 const User = require('../models/User')
-
+const bcrypt = require('bcrypt');
 
 exports.createUser = async (req, res) => {
     try {
-        console.log(req.body)
+
         const user = await User.create(req.body)
         res.status(201).json({
             status: 'succes',
@@ -17,35 +17,23 @@ exports.createUser = async (req, res) => {
 
     }
 }
-exports.GetAllCategory = async (req, res) => {
+exports.loginUser = async (req, res) => {
     try {
-        const user = await User.find()
-        res.status(200).render('courses', {
-            page_name: 'course',
-            user
-        })
+        const { email, password } = req.body; // Assuming you're sending email and password in the request body 
+        const user = await User.findOne({ email }); // Find the user by email 
+        if (user) {
+            const same = await bcrypt.compare(password, user.password); // Compare passwords 
+            if (same) { // Create a user session or send a token 
+                req.session.userID = user._id;
+                res.redirect('/')
+                //  res.status(200).send("You are logged in");
+            } else { res.status(401).send("Invalid password"); }
+        } else { res.status(404).send("User not found"); }
     } catch (error) {
-        res.status(404).json({
-            status: 'error',
-            error
-        })
+        res.status(500).json({ status: "error", error: error.message, });
     }
-}
-exports.GetCategory = async (req, res) => {
-    try {
-        const paramsSlug = req.params.slug;
+};
+exports.logoutUser = async (req, res) => {
+    req.session.destroy(() => res.redirect('/'))
 
-        const user = await User.find({ slug: paramsSlug });
-
-        const page_name = '';
-        res.status(200).render('course-single', {
-            page_name,
-            user
-        })
-    } catch (error) {
-        res.status(404).json({
-            status: 'error',
-            error
-        })
-    }
-}
+};
