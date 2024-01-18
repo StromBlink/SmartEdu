@@ -1,14 +1,12 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt');
-
+const Category = require('../models/Category');
+const Course = require('../models/Course');
 exports.createUser = async (req, res) => {
     try {
 
         const user = await User.create(req.body)
-        res.status(201).json({
-            status: 'succes',
-            user
-        })
+        res.redirect('/login')
     } catch (error) {
         res.status(404).json({
             status: 'error',
@@ -23,11 +21,11 @@ exports.loginUser = async (req, res) => {
         const user = await User.findOne({ email }); // Find the user by email 
         if (user) {
             const same = await bcrypt.compare(password, user.password); // Compare passwords 
-            if (same) { // Create a user session or send a token 
-                req.session.userID = user._id;
-                res.redirect('/users/dashboard')
-                //  res.status(200).send("You are logged in");
-            } else { res.status(401).send("Invalid password"); }
+
+            req.session.userID = user._id;
+            res.redirect('/users/dashboard')
+            //  res.status(200).send("You are logged in");
+
         } else { res.status(404).send("User not found"); }
     } catch (error) {
         res.status(500).json({ status: "error", error: error.message, });
@@ -37,13 +35,16 @@ exports.logoutUser = async (req, res) => {
     req.session.destroy(() => res.redirect('/'))
 
 };
-exports.getDashboard = async (req, res) => {
+exports.getDashboardPage = async (req, res) => {
     const id = req.session.userID
-    const user = await User.findOne({ _id: id })
-    console.log(user.name)
-    console.log(req.session.userID)
+    const courses = await Course.find({ user: id });
+    const user = await User.findOne({ _id: id }).populate('courses');
+    const categories = await Category.find();
+
     res.render('dashboard', {
         page_name: "dashboard",
-        user
+        user,
+        categories,
+        courses
     })
 }
