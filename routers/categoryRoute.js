@@ -3,10 +3,9 @@ const categoryController = require('../controllers/categoryController')
 
 const router = express.Router();
 
-
-router.route('/').post(categoryController.createCategory) // get localhost:3000/courses
-/* router.route('/courses').get(categoryController.GetAllCategory)
-router.route('/course-single/:slug').get(categoryController.GetCategory) */
+// get localhost:3000/category
+router.route('/create').post(categoryController.createCategory)
+router.route('/:id').delete(categoryController.deleteCategory)
 
 
 
